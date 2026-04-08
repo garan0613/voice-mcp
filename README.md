@@ -25,7 +25,7 @@ When you call the `speak` tool, you get:
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/xxx/voice-mcp.git
+git clone https://github.com/garan0613/voice-mcp.git
 cd voice-mcp
 ```
 
