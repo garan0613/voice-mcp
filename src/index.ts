@@ -4,7 +4,7 @@
  * An MCP server for AI voice synthesis with inline audio player.
  * Supports MiniMax TTS API with custom voice cloning.
  * 
- * GitHub: https://github.com/xxx/voice-mcp
+ * GitHub: https://github.com/garan0613/voice-mcp
  * License: MIT
  */
 
