@@ -19,7 +19,6 @@ import { z } from "zod";
 export interface Env {
   // MiniMax API credentials
   MINIMAX_API_KEY: string;
-  MINIMAX_GROUP_ID: string;
   VOICE_ID: string;
   // Optional: custom bot name for display
   BOT_NAME?: string;
@@ -331,7 +330,7 @@ function getPlayerHTML(botName: string): string {
 
 async function generateAudio(env: Env, text: string): Promise<{ success: boolean; audio_base64?: string; error?: string }> {
   try {
-    const t2aUrl = `https://api.minimaxi.com/v1/t2a_v2?GroupId=${env.MINIMAX_GROUP_ID}`;
+    const t2aUrl = "https://api.minimaxi.com/v1/t2a_v2";
     
     const response = await fetch(t2aUrl, {
       method: 'POST',

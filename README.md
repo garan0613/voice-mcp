@@ -43,10 +43,11 @@ Add your secrets to Cloudflare:
 
 ```bash
 npx wrangler secret put MINIMAX_API_KEY
-npx wrangler secret put MINIMAX_GROUP_ID
 npx wrangler secret put VOICE_ID
 npx wrangler secret put BOT_NAME  # Optional, defaults to "AI"
 ```
+
+> Current MiniMax T2A authentication uses the API key only. GroupId is no longer required.
 
 ### 4. Deploy
 
@@ -65,7 +66,6 @@ npx wrangler deploy
 | Variable | Required | Description |
 |----------|----------|-------------|
 | `MINIMAX_API_KEY` | ✅ | Your MiniMax API key |
-| `MINIMAX_GROUP_ID` | ✅ | Your MiniMax group ID |
 | `VOICE_ID` | ✅ | The cloned voice ID |
 | `BOT_NAME` | ❌ | Display name (default: "AI") |
 
