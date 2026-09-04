@@ -301,24 +301,44 @@ function getPlayerHTML(botName: string): string {
       window.parent.postMessage(msg, '*');
     }
     
+    let hostInitialized = false;
+    
     window.addEventListener('message', function(event) {
       const msg = event.data;
       if (!msg || typeof msg !== 'object') return;
+      
+      // Response to ui/initialize (id=1): send initialized only on success; show error and stop otherwise
+      if (msg.jsonrpc === '2.0' && msg.id === 1 && !hostInitialized && msg.method === undefined) {
+        if ('error' in msg) {
+          showError('Initialization failed: ' + ((msg.error && msg.error.message) || 'unknown'));
+          return;
+        }
+        if ('result' in msg) {
+          hostInitialized = true;
+          sendToHost('ui/notifications/initialized', {});
+        }
+        return;
+      }
       
       if (msg.jsonrpc === '2.0') {
         if (msg.method === 'ui/notifications/tool-input') {
           contentEl.innerHTML = '<div class="loading">Generating voice...</div>';
         }
         if (msg.method === 'ui/notifications/tool-result') {
-          const structured = msg.params?.structuredContent;
-          if (structured) handleData(structured);
+          const p = msg.params || {};
+          if (p.structuredContent) handleData(p.structuredContent);
+          else if (p.isError) showError((p.content && p.content[0] && p.content[0].text) || 'Tool returned an error');
         }
       }
       if (msg.structuredContent) handleData(msg.structuredContent);
     });
     
-    sendToHost('ui/initialize', { name: 'voice-mcp', version: '1.0.0' }, 1);
-    setTimeout(function() { sendToHost('ui/notifications/initialized', {}); }, 50);
+    // Register the listener first, then send initialize; initialized is sent only after a successful response (see id===1 branch above)
+    sendToHost('ui/initialize', {
+      protocolVersion: '2026-01-26',
+      appInfo: { name: 'voice-mcp', version: '1.1.0' },
+      appCapabilities: { availableDisplayModes: ['inline'] }
+    }, 1);
   </script>
 </body>
 </html>`;
